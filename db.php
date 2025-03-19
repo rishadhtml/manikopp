@@ -1,16 +1,21 @@
 <?php
-require 'vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+use Dotenv\Dotenv;
+
+$dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
+$host = $_ENV['DB_HOST'];
+$port = $_ENV['DB_PORT'];
+$dbname = $_ENV['DB_NAME'];
+$username = $_ENV['DB_USER'];
+$password = $_ENV['DB_PASSWORD'];
+
 try {
-    $dsn = "pgsql:host={$_ENV['DB_HOST']};port={$_ENV['DB_PORT']};dbname={$_ENV['DB_NAME']}";
-    $pdo = new PDO($dsn, $_ENV['DB_USER'], $_ENV['DB_PASS'], [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    ]);
+    $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
+    die("Connection failed: " . $e->getMessage());
 }
 ?>
