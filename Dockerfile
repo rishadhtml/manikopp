@@ -1,27 +1,26 @@
-# Use official PHP image
+# Use the official PHP image with Apache
 FROM php:8.2-apache
-
-# Install required dependencies
-RUN apt-get update && apt-get install -y \
-    libsqlite3-dev \
-    unzip \
-    && docker-php-ext-configure pdo_sqlite --with-pdo-sqlite=/usr \
-    && docker-php-ext-install pdo pdo_sqlite \
-    && docker-php-ext-install pdo pdo_mysql \
-    && docker-php-ext-install mysqli
-
-# Enable mod_rewrite for clean URLs
-RUN a2enmod rewrite
 
 # Set the working directory
 WORKDIR /var/www/html
 
-# Copy application files
-COPY . /var/www/html
+# Copy the contents of the public folder to the web root
+COPY public/ /var/www/html/
 
-# Set file permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html
+# Copy the config and other necessary files
+COPY config/ /var/www/html/config/
+COPY uploads/ /var/www/html/uploads/
+COPY composer.json composer.lock /var/www/html/
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    libonig-dev \
+    libzip-dev \
+    unzip \
+    && docker-php-ext-install pdo_mysql mbstring zip
+
+# Enable Apache mod_rewrite (if needed)
+RUN a2enmod rewrite
 
 # Expose port 80
 EXPOSE 80
