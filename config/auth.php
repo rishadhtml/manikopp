@@ -11,20 +11,22 @@ function isLoggedIn() {
 function getUser() {
     global $database;
     if (!isLoggedIn()) return null;
-    $userId = $_SESSION["user_id"];
-    return $database->querySingle("SELECT * FROM users WHERE id = $userId", true);
+    
+    $userId = intval($_SESSION["user_id"]); // Prevent SQL Injection
+    return $database->querySingle("SELECT id, email FROM users WHERE id = $userId", true);
 }
 
 // Redirect if not logged in
 function requireLogin() {
     if (!isLoggedIn()) {
-        header("Location: login.php");
+        header("Location: ../public/login.php"); // Ensure correct path
         exit;
     }
 }
 
 // Check if user is admin
 function isAdmin() {
-    return getUser()["email"] === getenv("ADMIN_EMAIL");
+    $user = getUser();
+    return $user && $user["email"] === getenv("ADMIN_EMAIL"); // Ensure user exists before checking
 }
 ?>
