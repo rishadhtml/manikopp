@@ -1,15 +1,15 @@
 <?php
 require 'vendor/autoload.php';
 
-$host = getenv('DB_HOST');
-$port = getenv('DB_PORT') ?: '5432'; // Default PostgreSQL port
-$dbname = getenv('DB_NAME');
-$user = getenv('DB_USER');
-$password = getenv('DB_PASS');
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 try {
-    $conn = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $dsn = "pgsql:host={$_ENV['DB_HOST']};port={$_ENV['DB_PORT']};dbname={$_ENV['DB_NAME']}";
+    $pdo = new PDO($dsn, $_ENV['DB_USER'], $_ENV['DB_PASS'], [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ]);
 } catch (PDOException $e) {
     die("Database connection failed: " . $e->getMessage());
 }
