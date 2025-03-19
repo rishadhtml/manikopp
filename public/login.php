@@ -1,14 +1,18 @@
 <?php
 require_once "../config/database.php";
 
+session_start(); // Start session at the top
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST["email"]);
     $password = trim($_POST["password"]);
     
-    $user = $database->querySingle("SELECT * FROM users WHERE email = '$email'", true);
+    // Prevent SQL Injection using a prepared statement
+    $stmt = $database->prepare("SELECT * FROM users WHERE email = :email");
+    $stmt->bindValue(":email", $email, SQLITE3_TEXT);
+    $user = $stmt->execute()->fetchArray(SQLITE3_ASSOC);
 
     if ($user && password_verify($password, $user["password"])) {
-        session_start();
         $_SESSION["user_id"] = $user["id"];
         header("Location: index.php");
         exit;
