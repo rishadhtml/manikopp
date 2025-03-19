@@ -1,29 +1,30 @@
-# Use the official PHP image with Apache
+# Use official PHP image with Apache
 FROM php:8.2-apache
 
-# Set the working directory
+# Set working directory
 WORKDIR /var/www/html
-
-# Copy the contents of the public folder to the web root
-COPY public/ /var/www/html/
-
-# Copy the config and other necessary files
-COPY config/ /var/www/html/config/
-COPY uploads/ /var/www/html/uploads/
-COPY composer.json composer.lock /var/www/html/
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
-    libonig-dev \
-    libzip-dev \
     unzip \
-    && docker-php-ext-install pdo_mysql mbstring zip
+    libpq-dev \
+    && docker-php-ext-install pdo pdo_mysql
 
-# Enable Apache mod_rewrite (if needed)
-RUN a2enmod rewrite
+# Copy project files
+COPY . /var/www/html/
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader
+
+# Set correct permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
 
 # Expose port 80
 EXPOSE 80
 
-# Start Apache server
+# Start Apache
 CMD ["apache2-foreground"]
