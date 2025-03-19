@@ -1,5 +1,19 @@
 {
+    "name": "yourproject/file-manager",
+    "description": "A simple file management system",
+    "type": "project",
     "require": {
-        "vlucas/phpdotenv": "^5.5"
+        "php": "^8.0",
+        "vlucas/phpdotenv": "^5.5",
+        "ext-pdo": "*",
+        "ext-pdo_pgsql": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true
     }
 }
