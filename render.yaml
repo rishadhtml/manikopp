@@ -1,8 +1,6 @@
 services:
   - type: web
     name: php-file-hosting
-    env: php
-    buildCommand: ""
-    startCommand: "php -S 0.0.0.0:10000 -t ."
-    repo: https://github.com/rishadhtml/manikopp
+    env: docker
+    dockerfilePath: ./Dockerfile
     plan: free
