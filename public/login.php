@@ -60,31 +60,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border: none;
             cursor: pointer;
         }
-        .rain {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            overflow: hidden;
-            z-index: 0;
-        }
-        .raindrop {
-            position: absolute;
-            width: 2px;
-            height: 100px;
-            background: linear-gradient(transparent, rgba(255, 255, 255, 0.5));
-            animation: fall 2s linear infinite;
-        }
-        @keyframes fall {
-            0% { transform: translateY(-100px); opacity: 1; }
-            100% { transform: translateY(100vh); opacity: 0; }
-        }
     </style>
 </head>
 <body>
-    <div class="rain"></div>
-
     <div class="container">
         <h1>Login</h1>
         <form method="POST">
@@ -95,16 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="register.php">Don't have an account? Register</a>
         <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
     </div>
-
-    <script>
-        const rainContainer = document.querySelector('.rain');
-        for (let i = 0; i < 100; i++) {
-            const raindrop = document.createElement('div');
-            raindrop.classList.add('raindrop');
-            raindrop.style.left = Math.random() * 100 + 'vw';
-            raindrop.style.animationDelay = Math.random() * 2 + 's';
-            rainContainer.appendChild(raindrop);
-        }
-    </script>
+</body>
+</html>
 </body>
 </html>
