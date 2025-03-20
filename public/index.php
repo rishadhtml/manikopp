@@ -31,7 +31,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["file"])) {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="rain"></div>
     <div class="container">
         <h1>𝗝𝗘𝗥𝗥𝗬 𝐏𝐇𝐏 𝐇𝐎𝐒𝐓𝐈𝐍𝐆 𝙅𝙀𝙍𝙍𝙔</h1>
         <form method="POST" enctype="multipart/form-data">
