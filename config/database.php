@@ -1,13 +1,20 @@
 <?php
-$host = "dpg-cvdfsm9c1ekc73e16vf0-a.oregon-postgres.render.com"; // Full external host
-$port = "5432";
-$dbname = "hostphpj";
-$user = "hostphpj_user";
-$password = "uHKT0Wu3zAF5njvOmbKegc4g4BDPUEE1";
+require_once __DIR__ . "/vendor/autoload.php"; // Load .env variables
+
+// Load environment variables
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$host = $_ENV["DB_HOST"];
+$port = $_ENV["DB_PORT"];
+$dbname = $_ENV["DB_DATABASE"];
+$user = $_ENV["DB_USERNAME"];
+$password = $_ENV["DB_PASSWORD"];
+$sslmode = $_ENV["DB_SSLMODE"] ?? "require"; // Default to "require"
 
 try {
-    // Include sslmode=require to enforce secure connection
-    $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;sslmode=require";
+    // Use the environment variables for database connection
+    $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;sslmode=$sslmode";
     $database = new PDO($dsn, $user, $password, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
