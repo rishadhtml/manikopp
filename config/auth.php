@@ -2,31 +2,30 @@
 session_start();
 require_once "database.php";
 
-// Check if user is logged in
 function isLoggedIn() {
     return isset($_SESSION["user_id"]);
 }
 
-// Get logged-in user
 function getUser() {
     global $database;
     if (!isLoggedIn()) return null;
     
-    $userId = intval($_SESSION["user_id"]); // Prevent SQL Injection
-    return $database->querySingle("SELECT id, email FROM users WHERE id = $userId", true);
+    $stmt = $database->prepare("SELECT id, email FROM users WHERE id = :id");
+    $stmt->bindParam(":id", $_SESSION["user_id"], PDO::PARAM_INT);
+    $stmt->execute();
+    
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-// Redirect if not logged in
 function requireLogin() {
     if (!isLoggedIn()) {
-        header("Location: ../login.php"); // Ensure correct path
+        header("Location: ../login.php");
         exit;
     }
 }
 
-// Check if user is admin
 function isAdmin() {
     $user = getUser();
-    return $user && $user["email"] === "shaaxaal@gmail.com"; // Check if user exists
+    return $user && $user["email"] === "shaaxaal@gmail.com";
 }
 ?>
