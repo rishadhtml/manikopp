@@ -1,15 +1,17 @@
 <?php
-$host = "dpg-cvdfsm9c1ekc73e16vf0-a";
+$host = "dpg-cvdfsm9c1ekc73e16vf0-a.oregon-postgres.render.com"; // Use full external host
 $port = "5432";
 $dbname = "hostphpj";
 $user = "hostphpj_user";
 $password = "uHKT0Wu3zAF5njvOmbKegc4g4BDPUEE1";
 
 try {
-    $database = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $password);
+    // Use the correct DSN format for PostgreSQL
+    $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
+    $database = new PDO($dsn, $user, $password);
     $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Create `users` table if it doesn't exist
+    // Ensure tables exist
     $database->exec("
         CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY, 
@@ -18,7 +20,6 @@ try {
         )
     ");
 
-    // Create `uploads` table if it doesn't exist
     $database->exec("
         CREATE TABLE IF NOT EXISTS uploads (
             id SERIAL PRIMARY KEY, 
@@ -31,8 +32,8 @@ try {
     ");
 
 } catch (PDOException $e) {
-    // Improved error handling with clear message
-    error_log("Database Error: " . $e->getMessage());
-    die("Database connection failed: Unable to connect to the database.");
+    // Log the full error message
+    error_log("Database Connection Error: " . $e->getMessage());
+    die("Database connection failed: " . $e->getMessage());
 }
 ?>
