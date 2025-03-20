@@ -1,15 +1,16 @@
 <?php
-$host = "dpg-cvdfsm9c1ekc73e16vf0-a.oregon-postgres.render.com"; // Use full external host
+$host = "dpg-cvdfsm9c1ekc73e16vf0-a.oregon-postgres.render.com"; // Full external host
 $port = "5432";
 $dbname = "hostphpj";
 $user = "hostphpj_user";
 $password = "uHKT0Wu3zAF5njvOmbKegc4g4BDPUEE1";
 
 try {
-    // Use the correct DSN format for PostgreSQL
-    $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
-    $database = new PDO($dsn, $user, $password);
-    $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Include sslmode=require to enforce secure connection
+    $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;sslmode=require";
+    $database = new PDO($dsn, $user, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
 
     // Ensure tables exist
     $database->exec("
