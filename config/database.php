@@ -1,16 +1,12 @@
 <?php
-require_once __DIR__ . "/vendor/autoload.php"; // Load .env variables
 
-// Load environment variables
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
-$host = $_ENV["DB_HOST"];
-$port = $_ENV["DB_PORT"];
-$dbname = $_ENV["DB_DATABASE"];
-$user = $_ENV["DB_USERNAME"];
-$password = $_ENV["DB_PASSWORD"];
-$sslmode = $_ENV["DB_SSLMODE"] ?? "require"; // Default to "require"
+// Use Render environment variables directly
+$host = getenv("DB_HOST");
+$port = getenv("DB_PORT");
+$dbname = getenv("DB_DATABASE");
+$user = getenv("DB_USERNAME");
+$password = getenv("DB_PASSWORD");
+$sslmode = getenv("DB_SSLMODE") ?: "require"; // Default to "require"
 
 try {
     // Use the environment variables for database connection
@@ -42,6 +38,6 @@ try {
 } catch (PDOException $e) {
     // Log the full error message
     error_log("Database Connection Error: " . $e->getMessage());
-    die("Database connection failed: " . $e->getMessage());
+    die("Database connection failed. Check logs for details.");
 }
 ?>
