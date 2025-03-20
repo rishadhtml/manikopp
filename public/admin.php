@@ -19,7 +19,6 @@ $uploads = $database->query("SELECT file_name, user_id FROM uploads");
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="rain"></div>
     <div class="container">
         <h1>𝗝𝗘𝗥𝗥𝗬 𝐏𝐇𝐏 𝐇𝐎𝐒𝐓𝐈𝐍𝐆 - ADMIN</h1>
 
