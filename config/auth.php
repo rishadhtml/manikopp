@@ -19,7 +19,7 @@ function getUser() {
 // Redirect if not logged in
 function requireLogin() {
     if (!isLoggedIn()) {
-        header("Location: ../public/login.php"); // Ensure correct path
+        header("Location: ../login.php"); // Ensure correct path
         exit;
     }
 }
@@ -27,6 +27,6 @@ function requireLogin() {
 // Check if user is admin
 function isAdmin() {
     $user = getUser();
-    return getUser()["email"] == "shaaxaal@gmail.com"; // Ensure user exists before checking
+    return $user && $user["email"] === "shaaxaal@gmail.com"; // Check if user exists
 }
 ?>
