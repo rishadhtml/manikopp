@@ -2,7 +2,8 @@
     "require": {
         "php": "^8.0",
         "ext-pdo": "*",
-        "ext-sqlite3": "*"
+        "ext-sqlite3": "*",
+        "vlucas/phpdotenv": "^5.5"
     },
     "autoload": {
         "psr-4": {
